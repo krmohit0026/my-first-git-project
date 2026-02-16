@@ -1,0 +1,25 @@
+[
+  {
+    "columns": [
+      "transaction_id,customer_id,amount,currency,status"
+    ],
+    "total_rows": 5
+  },
+  [
+    {
+      "transaction_id,customer_id,amount,currency,status": "T1001,C001,250,USD,COMPLETED"
+    },
+    {
+      "transaction_id,customer_id,amount,currency,status": "T1002,C002,,USD,PENDING"
+    },
+    {
+      "transaction_id,customer_id,amount,currency,status": "T1003,,450,EUR,FAILED"
+    },
+    {
+      "transaction_id,customer_id,amount,currency,status": "T1004,C004,-50,USD,COMPLETED"
+    },
+    {
+      "transaction_id,customer_id,amount,currency,status": "T1005,C005,300,,COMPLETED"
+    }
+  ]
+]
