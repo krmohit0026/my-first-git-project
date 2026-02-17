@@ -1,0 +1,6 @@
+order_id,region,product,quantity,price
+1001,East,Keyboard,2,1500
+1002,West,Mouse,5,500
+1003,East,Monitor,,12000
+1004,South,Keyboard,1,1500
+1005,West,Monitor,2,12000
