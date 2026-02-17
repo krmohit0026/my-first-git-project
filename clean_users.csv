@@ -1,1 +1,4 @@
-"id,name,age,email",status
+id,name,age,email
+1,Alex,28,alex@example.com
+2,Bob,UNKNOWN,bob@example.com
+4,Diana,UNKNOWN,diana@example.com

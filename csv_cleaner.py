@@ -9,198 +9,57 @@ Original file is located at
 
 import csv
 
-def clean_users_csv(input_path, output_path):
-    with open(input_path, 'r', encoding='utf-8-sig') as infile:
+def clean_csv(input_file, output_file):
+    """
+    Clean a CSV file by applying transformation rules.
+    """
+    cleaned_rows = []
+
+    # Use 'utf-8-sig' to handle hidden Excel characters
+    with open(input_file, 'r', encoding='utf-8-sig') as infile:
+        # skipinitialspace=True handles "id, name" spacing issues
         reader = csv.DictReader(infile, skipinitialspace=True)
-        data = list(reader)
+        columns = reader.fieldnames
 
-        fieldnames = reader.fieldnames + ['status']
-        cleaned_rows = []
-
-        # Counters for the final summary
-        mod_count = 0
-        orig_count = 0
-
-        for row in data:
-            row_status = "Original"
-
+        for row in reader:
+            # 1. Skip this row if name is missing or empty
+            # We use .get() to avoid errors if the column name has a hidden space
             name_val = row.get('name')
             if not name_val or name_val.strip() == '':
-                print(f"Skipping row ID {row.get('id')}: Name is missing.")
                 continue
 
             # 2. Clean Age
-            raw_age = row.get('age', '').strip()
+            age = row.get('age', '').strip()
             try:
-                age_int = int(raw_age)
-                if age_int <= 0:
+                age_value = int(age)
+                if age_value <= 0:
                     row['age'] = 'UNKNOWN'
-                    row_status = "Modified"
                 else:
-                    row['age'] = str(age_int)
+                    row['age'] = str(age_value)
             except (ValueError, TypeError):
                 row['age'] = 'UNKNOWN'
-                row_status = "Modified"
 
             # 3. Clean Email
             if row.get('email'):
-                original_email = row['email']
                 row['email'] = row['email'].lower().strip()
-                if row['email'] != original_email:
-                    row_status = "Modified"
 
-            # Merge status and append immediately
-            row['status'] = row_status
+            # 4. Add the row to our list (Must be inside the for loop)
             cleaned_rows.append(row)
 
-            # Update counts
-            if row_status == "Modified":
-                mod_count += 1
-            else:
-                orig_count += 1
-
-    with open(output_path, 'w', encoding='utf-8', newline='') as outfile:
-        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+    # 5. Write to output file (Must be outside the for loop)
+    with open(output_file, 'w', encoding='utf-8', newline='') as outfile:
+        writer = csv.DictWriter(outfile, fieldnames=columns)
         writer.writeheader()
         writer.writerows(cleaned_rows)
 
-    print(f"\n--- Processing Summary ---")
-    print(f"Rows Kept (Original): {orig_count}")
-    print(f"Rows Fixed (Modified): {mod_count}")
-    print(f"Total Rows Saved: {len(cleaned_rows)}")
+    print(f"Cleaned {len(cleaned_rows)} rows. Output saved to {output_file}")
 
 if __name__ == "__main__":
-    clean_users_csv('Raw_users.csv', 'clean_users.csv')
-
-import csv
-
-def clean_users_csv(input_path, output_path):
-    with open(input_path, 'r', encoding='utf-8-sig') as infile:
-        # skipinitialspace helps, but we will go a step further
-        reader = csv.DictReader(infile, skipinitialspace=True)
-        data = list(reader)
-
-        if not data:
-            print("The CSV file is empty!")
-            return
-
-        # --- DIAGNOSTIC PRINT ---
-        # This will show us exactly what the columns are named
-        print(f"DEBUG: Detected Columns are: {reader.fieldnames}")
-
-        # Create a cleaned fieldnames list for the output
-        fieldnames = [f.strip() for f in reader.fieldnames] + ['status']
-        cleaned_rows = []
-
-        for row in data:
-            # We strip the keys in the row to handle " name" -> "name"
-            clean_row = {k.strip(): v for k, v in row.items()}
-
-            row_status = "Original"
-
-            # Now we use the clean_row
-            name_val = clean_row.get('name')
-            if not name_val or name_val.strip() == '':
-                print(f"Skipping row ID {clean_row.get('id')}: Name is missing.")
-                continue
-
-            # 2. Clean Age
-            raw_age = clean_row.get('age', '').strip()
-            try:
-                age_int = int(raw_age)
-                if age_int <= 0:
-                    clean_row['age'] = 'UNKNOWN'
-                    row_status = "Modified"
-                else:
-                    clean_row['age'] = str(age_int)
-            except (ValueError, TypeError):
-                clean_row['age'] = 'UNKNOWN'
-                row_status = "Modified"
-
-            # 3. Clean Email
-            if clean_row.get('email'):
-                original_email = clean_row['email']
-                clean_row['email'] = clean_row['email'].lower().strip()
-                if clean_row['email'] != original_email:
-                    row_status = "Modified"
-
-            clean_row['status'] = row_status
-            cleaned_rows.append(clean_row)
-
-    with open(output_path, 'w', encoding='utf-8', newline='') as outfile:
-        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(cleaned_rows)
-
-    print(f"\n--- Processing Summary ---")
-    print(f"Total Rows Saved: {len(cleaned_rows)}")
+    input_file = "raw_users.csv"
+    output_file = "clean_users.csv"
+    clean_csv(input_file, output_file)
 
 if __name__ == "__main__":
-    clean_users_csv('Raw_users.csv', 'clean_users.csv')
-
-from google.colab import drive
-drive.mount('/content/drive')
-
-import csv
-
-def clean_users_csv(input_path, output_path):
-    with open(input_path, 'r', encoding='utf-8-sig') as infile:
-        # We explicitly tell Python to use a comma as a delimiter
-        # and to be flexible with how it quotes strings
-        reader = csv.DictReader(infile, delimiter=',', quotechar='"')
-        data = list(reader)
-
-        if not data:
-            print("The CSV file is empty!")
-            return
-
-        # We need to make sure we handle that "one big string" issue
-        # by stripping any weirdness from the fieldnames
-        fieldnames = [f.strip() for f in reader.fieldnames] + ['status']
-        cleaned_rows = []
-
-        for row in data:
-            # Create a clean dictionary where keys are trimmed
-            clean_row = {k.strip(): v for k, v in row.items()}
-
-            row_status = "Original"
-
-            # Check 'name'
-            name_val = clean_row.get('name')
-            if not name_val or name_val.strip() == '':
-                # This print will now show you if the data is all lumped together
-                print(f"Skipping Row: Name missing. (Row contents: {list(clean_row.values())})")
-                continue
-
-            # Clean Age
-            raw_age = str(clean_row.get('age', '')).strip()
-            try:
-                age_int = int(raw_age)
-                if age_int <= 0:
-                    clean_row['age'] = 'UNKNOWN'
-                    row_status = "Modified"
-                else:
-                    clean_row['age'] = str(age_int)
-            except (ValueError, TypeError):
-                clean_row['age'] = 'UNKNOWN'
-                row_status = "Modified"
-
-            # Clean Email
-            if clean_row.get('email'):
-                original_email = clean_row['email']
-                clean_row['email'] = clean_row['email'].lower().strip()
-                if clean_row['email'] != original_email:
-                    row_status = "Modified"
-
-            clean_row['status'] = row_status
-            cleaned_rows.append(clean_row)
-
-    with open(output_path, 'w', encoding='utf-8', newline='') as outfile:
-        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(cleaned_rows)
-
-    print(f"\nSuccess! Saved {len(cleaned_rows)} rows to {output_path}")
-
-if __name__ == "__main__":
-    clean_users_csv('Raw_users.csv', 'clean_users.csv')
+    input_file = "raw_users.csv"
+    output_file = "clean_users.csv"
+    clean_csv(input_file, output_file)
