@@ -1,0 +1,9 @@
+order_id,region,product,quantity,price
+2001,North,Keyboard,2,1500
+2002,South,Mouse,1,500
+2003,North,Monitor,1,12000
+2004,East,Mouse,4,500
+2005,West,Keyboard,1,1500
+2006,South,Monitor,,12000
+2007,East,Keyboard,3,1500
+2008,West,Mouse,2,500
