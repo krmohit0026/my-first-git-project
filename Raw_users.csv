@@ -1,5 +1,5 @@
-"id,name,age,email"
-"1,Alex,28,alex@example.com"
-"2,Bob,,bob@example.com"
-"3,,35,unknown@example.com"
-"4,Diana,-1,diana@example.com"
+id,name,age,email
+1,Alex,28,alex@example.com
+2,Bob,,bob@example.com
+3,,35,unknown@example.com
+4,Diana,-1,diana@example.com
