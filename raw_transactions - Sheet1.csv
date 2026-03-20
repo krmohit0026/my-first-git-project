@@ -1,0 +1,11 @@
+transaction_id,date,customer_name,product,quantity,unit_price,region
+T001,2024-06-01,alice smith,Widget A,3,25,east
+T002,2024-06-01,Bob Jones,Widget B,1,50,West
+T003,2024-06-02,alice smith,Widget A,2,25,EAST
+T004,2024-06-02,Charlie Lee,,5,10,south
+T005,2024-06-03,Bob Jones,Widget C,-1,30,West
+T006,2024-06-03,alice smith,Widget A,3,25,east
+T007,2024-06-04,,Widget B,2,50,North
+T008,2024-06-04,Diana Ross,Widget A,0,25,east
+T009,2024-06-05,Bob Jones,Widget B,1,50,West
+T010,2024-06-05,Bob Jones,Widget B,1,50,West

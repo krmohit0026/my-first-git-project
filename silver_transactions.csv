@@ -1,0 +1,7 @@
+transaction_id,date,customer_name,product,quantity,unit_price,region,total_amount
+T001,2024-06-01,Alice Smith,Widget A,3,25,East,75
+T002,2024-06-01,Bob Jones,Widget B,1,50,West,50
+T003,2024-06-02,Alice Smith,Widget A,2,25,East,50
+T006,2024-06-03,Alice Smith,Widget A,3,25,East,75
+T009,2024-06-05,Bob Jones,Widget B,1,50,West,50
+T010,2024-06-05,Bob Jones,Widget B,1,50,West,50
